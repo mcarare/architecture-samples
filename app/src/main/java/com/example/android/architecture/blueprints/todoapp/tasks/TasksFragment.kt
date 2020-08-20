@@ -37,14 +37,16 @@ import com.example.android.architecture.blueprints.todoapp.util.setupRefreshLayo
 import com.example.android.architecture.blueprints.todoapp.util.setupSnackbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 /**
  * Display a grid of [Task]s. User can choose to view all, active or completed tasks.
  */
+@AndroidEntryPoint
 class TasksFragment : Fragment() {
 
-    private val viewModel by viewModels<TasksViewModel> { getViewModelFactory() }
+    private val viewModel by viewModels<TasksViewModel>()
 
     private val args: TasksFragmentArgs by navArgs()
 
@@ -98,10 +100,10 @@ class TasksFragment : Fragment() {
     }
 
     private fun setupNavigation() {
-        viewModel.openTaskEvent.observe(this, EventObserver {
+        viewModel.openTaskEvent.observe(viewLifecycleOwner, EventObserver {
             openTaskDetails(it)
         })
-        viewModel.newTaskEvent.observe(this, EventObserver {
+        viewModel.newTaskEvent.observe(viewLifecycleOwner, EventObserver {
             navigateToAddNewTask()
         })
     }
